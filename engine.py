@@ -1,104 +1,62 @@
-import asyncio
 import json
 import os
-import hashlib
+import asyncio
 from datetime import datetime
+
+# --- Cloud Sync Function ---
+def sync_to_cloud():
+    print("\n[☁️] Saving to Cloud... Please wait.")
+    # Vault file aur tamaam receipts ko add karega
+    os.system("git add vault_data.json receipt_*.txt")
+    os.system('git commit -m "Auto-update: Balance & Transactions"')
+    os.system("git push origin main")
+    print("[✅] Cloud Backup Complete!")
 
 class TidbitSystem:
     def __init__(self):
-        self.save_file = "vault_data.json"
-        self.secret_key = "TIDBIT_PRO_SECRET_99"
-        self.admin_pin = "1234" 
-        self.data = self.load_data()
+        self.file_path = "vault_data.json"
         self.is_running = True
-
-    def generate_signature(self, balance):
-        return hashlib.sha256(f"{balance}{self.secret_key}".encode()).hexdigest()
+        self.load_data()
 
     def load_data(self):
-        if os.path.exists(self.save_file):
-            try:
-                with open(self.save_file, 'r') as f:
-                    stored = json.load(f)
-                if stored.get("signature") == self.generate_signature(stored["balance"]):
-                    return stored
-            except: pass
-        return {"balance": 50.0, "ledger": []}
-
-    def save_data(self):
-        self.data["signature"] = self.generate_signature(self.data["balance"])
-        with open(self.save_file, 'w') as f:
-            json.dump(self.data, f, indent=4)
-
-    def generate_receipt(self, amount, account, tx_id):
-        """Transaction ki digital slip banati hai"""
-        filename = f"receipt_{tx_id}.txt"
-        content = f"""
-        -----------------------------------
-        TIDBIT SYSTEM - WITHDRAWAL SLIP
-        -----------------------------------
-        Transaction ID: {tx_id}
-        Date & Time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-        Account: {account} (EasyPaisa)
-        Amount: ${amount}
-        Status: SUCCESSFUL
-        -----------------------------------
-        Thank you for using Tidbit Vault!
-        -----------------------------------
-        """
-        with open(filename, "w") as f:
-            f.write(content)
-        print(f"📄 Receipt saved as: {filename}")
-
-    async def run_ad_engine(self):
-        while self.is_running:
-            await asyncio.sleep(5) 
-            revenue = 2.50
-            self.data["balance"] = round(self.data["balance"] + revenue, 4)
+        if os.path.exists(self.file_path):
+            with open(self.file_path, "r") as f:
+                self.data = json.load(f)
+        else:
+            self.data = {"balance": 1010.00, "pin": "1234"}
             self.save_data()
 
+    def save_data(self):
+        with open(self.file_path, "w") as f:
+            json.dump(self.data, f, indent=4)
+
     async def start(self):
-        print("🔒 SECURITY CHECK")
-        entered_pin = input("Enter Secret PIN: ")
-        
-        if entered_pin != self.admin_pin:
-            print("❌ ACCESS DENIED!")
+        print("--- Rana G's Secure Vault ---")
+        pin = input("Enter PIN: ")
+        if pin != self.data["pin"]:
+            print("Wrong PIN!")
             return
 
-        print("\n✅ Access Granted!")
-        asyncio.create_task(self.run_ad_engine())
-        
-        while True:
-            print(f"\n[Vault Balance: ${self.data['balance']:.2f}]")
-            print("[1] Stats [2] Withdraw [Q] Exit")
-            choice = input("Select >> ").lower()
+        while self.is_running:
+            print(f"\nCurrent Balance: ${self.data['balance']}")
+            print("[1] Withdraw [2] Exit (q)")
+            choice = input("Select: ").lower()
 
             if choice == '1':
-                print(f"System status: Online. Integrity: 100%")
-            elif choice == '2':
-                try:
-                    amount = float(input("Enter amount: "))
-                    if amount <= self.data["balance"]:
-                        account = input("Enter EasyPaisa No: ")
-                        tx_id = hashlib.md5(str(datetime.now()).encode()).hexdigest()[:10].upper()
-                        
-                        self.data["balance"] -= amount
-                        self.save_data()
-                        
-                        # Receipt generate karna
-                        self.generate_receipt(amount, account, tx_id)
-                        print(f"💸 Withdrawal Processed!")
-                    else:
-                        print("❌ Low Balance!")
-                except ValueError:
-                    print("❌ Invalid Amount!")
-            elif choice == 'money_rain':
-                self.data["balance"] += 1000.0
-                self.save_data()
-                print("\n🤑 BOOM! Secret Money Rain Activated: +$1000")
+                amount = float(input("Amount: "))
+                if amount <= self.data['balance']:
+                    self.data['balance'] -= amount
+                    self.save_data()
+                    print(f"Success! New Balance: ${self.data['balance']}")
+                else:
+                    print("Insufficient funds!")
+            
             elif choice == 'q':
                 self.is_running = False
+                # Exit karne se pehle cloud par bhejega
+                sync_to_cloud()
                 print("Locked. 🤫🤍")
+                print("Shukriya Rana G! Allah Hafiz.")
                 break
 
 if __name__ == "__main__":
@@ -106,4 +64,4 @@ if __name__ == "__main__":
         app = TidbitSystem()
         asyncio.run(app.start())
     except KeyboardInterrupt:
-        print("\nExit.")
+        print("\nForced Exit.")
