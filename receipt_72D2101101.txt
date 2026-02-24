@@ -1,0 +1,13 @@
+
+        -----------------------------------
+        TIDBIT SYSTEM - WITHDRAWAL SLIP
+        -----------------------------------
+        Transaction ID: 72D2101101
+        Date & Time: 2026-02-25 01:36:35
+        Account: 03066380522 (EasyPaisa)
+        Amount: $6.0
+        Status: SUCCESSFUL
+        -----------------------------------
+        Thank you for using Tidbit Vault!
+        -----------------------------------
+        
