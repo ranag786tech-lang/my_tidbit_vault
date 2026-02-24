@@ -3,52 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tidbit Pro Vault - Rana G</title>
+    <title>Tidbit Pro - Rana G</title>
     <style>
         :root { --neon: #00ff88; --bg: #0a0a0a; --card: #161616; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0, 255, 136, 0.1); text-align: center; width: 100%; max-width: 350px; }
-        h1 { font-size: 1.1rem; color: var(--neon); text-transform: uppercase; letter-spacing: 2px; }
-        .balance { font-size: 3.2rem; font-weight: 800; margin: 15px 0; color: #fff; }
-        .progress-container { background: #222; border-radius: 10px; height: 10px; margin: 20px 0; overflow: hidden; }
-        .progress-bar { background: var(--neon); height: 100%; width: 0%; transition: 0.5s; box-shadow: 0 0 10px var(--neon); }
-        .task-list { text-align: left; background: #111; padding: 15px; border-radius: 15px; margin-top: 20px; }
-        .task-item { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px; color: #bbb; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #333; text-align: center; width: 100%; max-width: 350px; }
+        .balance { font-size: 3rem; font-weight: 800; margin: 10px 0; color: #fff; }
         .status-on { color: var(--neon); font-weight: bold; }
-        .btn { background: var(--neon); color: black; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
+        .btn-verify { background: #ffcc00; color: black; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
+        .task-list { text-align: left; background: #111; padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
-
     <div class="card">
-        <h1>Cloud Mining Active ⚡</h1>
-        <div id="clock" style="font-size: 0.8rem; color: #666;"></div>
-        
+        <h1 style="color: var(--neon); font-size: 1rem;">CLOUD MINING ACTIVE ⚡</h1>
+        <div id="clock" style="color: #666; font-size: 0.7rem;"></div>
         <div class="balance" id="balance-display">$0.00</div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="mining-bar"></div>
-        </div>
 
         <div class="task-list">
-            <div class="task-item"><span>Daily Bonus</span> <span class="status-on">● Received</span></div>
-            <div class="task-item"><span>Security Scan</span> <span id="scan-status">● Waiting</span></div>
-            <div class="task-item"><span>Network Hash</span> <span style="color: #555;">● Offline</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>Network Hash:</span> <span class="status-on">● 14.5 TH/s (Online)</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span>Server Status:</span> <span class="status-on">● Connected</span>
+            </div>
         </div>
 
-        <button class="btn" onclick="startMining()">Sync Cloud Data</button>
+        <button class="btn-verify" onclick="openEarningLink()">🔓 Unlock Daily Reward ($5.00)</button>
+        <p style="font-size: 0.6rem; color: #888; margin-top: 5px;">*Complete verification to add balance</p>
     </div>
 
     <script>
         function updateTime() { document.getElementById('clock').innerText = new Date().toLocaleString(); }
         setInterval(updateTime, 1000);
 
-        function startMining() {
-            let bar = document.getElementById('mining-bar');
-            let status = document.getElementById('scan-status');
-            bar.style.width = "0%";
-            setTimeout(() => { bar.style.width = "100%"; status.innerText = "● Complete"; status.className = "status-on"; }, 500);
-            setTimeout(() => { location.reload(); }, 2000);
+        function openEarningLink() {
+            // Rana G, yahan hum aapka Ad-Link dalenge. 
+            // Abhi ke liye main ek sample link de raha hun.
+            alert("Redirecting to Secure Verification...");
+            window.location.href = "https://www.google.com"; // Isay baad mein badlenge
         }
 
         fetch('vault_data.json')
