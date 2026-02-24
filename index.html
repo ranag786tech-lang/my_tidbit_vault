@@ -3,31 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rana G - Tidbit Dashboard</title>
+    <title>Tidbit Premium - Rana G</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; text-align: center; padding: 50px; }
-        .card { background: #2d2d2d; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: inline-block; min-width: 300px; border: 1px solid #444; }
-        h1 { color: #00ff88; margin-bottom: 10px; }
-        .balance { font-size: 3rem; font-weight: bold; margin: 20px 0; color: #fff; }
-        .status { color: #888; font-size: 0.9rem; }
+        :root { --neon: #00ff88; --bg: #0a0a0a; --card: #161616; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        
+        .card { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid #333; box-shadow: 0 0 30px rgba(0, 255, 136, 0.1); text-align: center; width: 100%; max-width: 350px; position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--neon); }
+        
+        h1 { font-size: 1.2rem; color: var(--neon); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        #clock { font-size: 0.9rem; color: #888; margin-bottom: 20px; }
+        
+        .balance-label { color: #aaa; font-size: 0.8rem; text-transform: uppercase; }
+        .balance { font-size: 3.5rem; font-weight: 800; margin: 10px 0; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
+        .stat-box { text-align: left; }
+        .stat-box small { color: #666; display: block; }
+        .stat-box span { color: var(--neon); font-weight: bold; }
+
+        .btn { background: var(--neon); color: black; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 255, 136, 0.4); }
     </style>
 </head>
 <body>
+
     <div class="card">
         <h1>Tidbit Vault 🔐</h1>
-        <p class="status">Live Cloud Balance</p>
+        <div id="clock">Loading Time...</div>
+        
+        <div class="balance-label">Available Balance</div>
         <div class="balance" id="balance-display">$0.00</div>
-        <p>User: <strong>ranag786tech-lang</strong></p>
+        
+        <div class="stats-grid">
+            <div class="stat-box">
+                <small>Account</small>
+                <span>Premium User</span>
+            </div>
+            <div class="stat-box">
+                <small>Owner</small>
+                <span>Rana G</span>
+            </div>
+        </div>
+
+        <button class="btn" onclick="location.reload()">Refresh Data</button>
     </div>
 
     <script>
-        // Ye script aapki vault_data.json se balance uthayegi
+        // Clock Function
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleString();
+        }
+        setInterval(updateTime, 1000);
+
+        // Fetch Data from GitHub
         fetch('vault_data.json')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('balance-display').innerText = '$' + data.balance.toFixed(2);
             })
-            .catch(err => console.log('Wait for data...'));
+            .catch(err => {
+                document.getElementById('balance-display').innerText = "Syncing...";
+            });
     </script>
 </body>
 </html>
