@@ -7,41 +7,61 @@
     <style>
         :root { --neon: #00ff88; --bg: #0a0a0a; --card: #161616; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .card { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #333; text-align: center; width: 100%; max-width: 350px; }
-        .balance { font-size: 3rem; font-weight: 800; margin: 10px 0; color: #fff; }
+        .card { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #333; text-align: center; width: 100%; max-width: 350px; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+        .balance { font-size: 3.2rem; font-weight: 800; margin: 10px 0; color: #fff; }
+        .status-box { background: #111; padding: 15px; border-radius: 15px; margin: 15px 0; text-align: left; font-size: 0.85rem; border: 1px solid #222; }
         .status-on { color: var(--neon); font-weight: bold; }
-        .btn-verify { background: #ffcc00; color: black; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; }
-        .task-list { text-align: left; background: #111; padding: 15px; border-radius: 15px; margin-top: 15px; font-size: 0.8rem; }
+        .btn-main { background: #ffcc00; color: black; border: none; padding: 14px; border-radius: 12px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; font-size: 1rem; }
+        .btn-admin { background: transparent; color: #555; border: 1px solid #333; padding: 8px; border-radius: 8px; width: 100%; margin-top: 20px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1 style="color: var(--neon); font-size: 1rem;">CLOUD MINING ACTIVE ⚡</h1>
-        <div id="clock" style="color: #666; font-size: 0.7rem;"></div>
-        <div class="balance" id="balance-display">$0.00</div>
 
-        <div class="task-list">
-            <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                <span>Network Hash:</span> <span class="status-on">● 14.5 TH/s (Online)</span>
+    <div class="card">
+        <h1 style="color: var(--neon); font-size: 0.9rem; letter-spacing: 1px;">CLOUD MINING ACTIVE ⚡</h1>
+        
+        <div class="balance" id="balance-display">$1014.50</div>
+
+        <div class="status-box">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span>Network Hash:</span> <span class="status-on">● 14.5 TH/s</span>
             </div>
             <div style="display:flex; justify-content:space-between;">
                 <span>Server Status:</span> <span class="status-on">● Connected</span>
             </div>
         </div>
 
-        <button class="btn-verify" onclick="openEarningLink()">🔓 Unlock Daily Reward ($5.00)</button>
-        <p style="font-size: 0.6rem; color: #888; margin-top: 5px;">*Complete verification to add balance</p>
+        <button class="btn-main" onclick="openEarningLink()">🔓 Unlock Daily Reward ($5.00)</button>
+        <p style="font-size: 0.65rem; color: #666; margin-top: 8px;">*Complete verification to sync earnings</p>
+
+        <button class="btn-admin" onclick="adminLogin()">Admin Access (PIN Required)</button>
     </div>
 
     <script>
-        function updateTime() { document.getElementById('clock').innerText = new Date().toLocaleString(); }
-        setInterval(updateTime, 1000);
-
         function openEarningLink() {
-            //("https://www.effectivegatecpm.com/dra8zp8mz?key=2c5c27935422000147a015220b9cf932");
+            const myAdLink = "https://www.effectivegatecpm.com/dra8zp8mz?key=2c5c27935422000147a015220b9cf932";
+            alert("🔒 Connecting to Secure Server...");
+            window.open(myAdLink, '_blank');
+        }
+
+        function adminLogin() {
+            let pin = prompt("Enter Secret PIN to Access Wallet:");
+            if(pin === "1234") {
+                alert("Access Granted! Opening Withdraw Portal...");
+                // Yahan aap apna withdraw link ya message daal sakte hain
+            } else {
+                alert("❌ Invalid PIN! Unauthorized Access Logged.");
+            }
+        }
+
+        // Balance fetch karne ke liye
         fetch('vault_data.json')
             .then(r => r.json())
-            .then(data => { document.getElementById('balance-display').innerText = '$' + data.balance.toFixed(2); })
+            .then(data => { 
+                if(data.balance) {
+                    document.getElementById('balance-display').innerText = '$' + data.balance.toFixed(2);
+                }
+            }).catch(e => console.log("Cloud data loading..."));
     </script>
 </body>
 </html>
