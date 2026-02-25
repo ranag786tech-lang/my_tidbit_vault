@@ -38,12 +38,7 @@
         setInterval(updateTime, 1000);
 
         function openEarningLink() {
-            // Rana G, yahan hum aapka Ad-Link dalenge. 
-            // Abhi ke liye main ek sample link de raha hun.
-            alert("https://www.effectivegatecpm.com/dra8zp8mz?key=2c5c27935422000147a015220b9cf932");
-            window.location.href = "https://www.google.com"; // Isay baad mein badlenge
-        }
-
+            //("https://www.effectivegatecpm.com/dra8zp8mz?key=2c5c27935422000147a015220b9cf932");
         fetch('vault_data.json')
             .then(r => r.json())
             .then(data => { document.getElementById('balance-display').innerText = '$' + data.balance.toFixed(2); })
